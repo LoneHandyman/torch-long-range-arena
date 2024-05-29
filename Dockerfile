@@ -1,18 +1,17 @@
-FROM ubuntu:latest
+# Usa una imagen base de Python
+FROM python:3.9
 
-RUN apt-get update && apt-get install -y python3 python3-pip
-
+# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-COPY requirements.txt /app
+# Copia el archivo requirements.txt al contenedor en el directorio de trabajo
+COPY requirements.txt .
 
-RUN python3 -m venv /app/venv
-RUN source /app/venv/bin/activate  # Activate the virtual environment
+# Instala las dependencias especificadas en requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY main.py /app
+# Copia el archivo main.py al contenedor en el directorio de trabajo
+COPY main.py .
 
-RUN /app/venv/bin/pip install -r /app/requirements.txt
-
-RUN /app/venv/bin/python /app/main.py
-
-ENTRYPOINT ["workdir", "/app"]
+# Define el comando para ejecutar main.py
+CMD ["python", "main.py"]
